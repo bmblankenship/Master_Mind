@@ -7,6 +7,8 @@ class MasterMind:
         """Initialize the game, and create game resources."""
 
         self.answer = [0, 0, 0, 0]
+        self.correct_guesses = ['X', 'X', 'X', 'X']
+        self.contains_number = []
         self.guess = [0, 0, 0, 0]
         self.attempted_guesses = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
         self.life = 0
@@ -17,11 +19,19 @@ class MasterMind:
         while self.running:
             if self.guess == self.answer:
                 self.running = False
-            elif self.life > 6:
+            elif self.life == 6:
                 self._lose_state()
             else:
                 self._take_input()
         sys.exit()
+
+    def _show_correct_guesses(self):
+        for i in range(len(self.guess)):
+            if str(self.guess[i]) == self.answer[i]:
+                self.correct_guesses[i] = str(self.guess[i])
+            elif i in self.answer and str(self.guess):
+                if i not in self.contains_number:
+                    self.contains_number.append(i)
 
     def _lose_state(self):
         print("You have used all your guesses. Better luck next time!\n\n")
@@ -29,7 +39,9 @@ class MasterMind:
         self._starting_output()
 
     def _take_input(self):
-        print("Guess is incorrect. You guessed the following digits correctly: ")
+        self._show_correct_guesses()
+        print("Guess is incorrect. You guessed the following digits correctly: ", self.correct_guesses, "\n")
+        print("The answer contains the following digits: ", self.contains_number)
         prompt = input()
         self._check_input(prompt)
 
