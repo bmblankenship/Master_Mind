@@ -17,11 +17,21 @@ class MasterMind:
         while self.running:
             if self.guess == self.answer:
                 self.running = False
+            elif self.life > 6:
+                self._lose_state()
             else:
-                print("Guess is incorrect. Try again: ")
-                prompt = input()
-                self._check_input(prompt)
+                self._take_input()
         sys.exit()
+
+    def _lose_state(self):
+        print("You have used all your guesses. Better luck next time!\n\n")
+        self.life = 0
+        self._starting_output()
+
+    def _take_input(self):
+        print("Guess is incorrect. You guessed the following digits correctly: ")
+        prompt = input()
+        self._check_input(prompt)
 
     def _starting_output(self):
         # Generate Initial Answer
@@ -32,7 +42,7 @@ class MasterMind:
 
     def _check_input(self, prompt):
         if prompt == 'Q' or prompt == 'q':
-            sys.exit()
+            self.running = False
         else:
             for i in range(len(prompt)):
                 self.guess[i] = int(prompt[i])
