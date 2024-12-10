@@ -1,6 +1,5 @@
 import random as ran
 import sys
-from pprint import pprint
 
 class MasterMind:
 
