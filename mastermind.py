@@ -1,5 +1,6 @@
 import random as ran
 import sys
+from pprint import pprint
 
 class MasterMind:
 
@@ -10,7 +11,7 @@ class MasterMind:
         self.correct_guesses = ['X', 'X', 'X', 'X']
         self.contains_number = []
         self.guess = [0, 0, 0, 0]
-        self.attempted_guesses = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        self.attempted_guesses = []
         self.life = 0
         self.running = True
 
@@ -19,6 +20,7 @@ class MasterMind:
         while self.running:
             if self.guess == self.answer:
                 self.running = False
+                print("Congratulations! You guessed correctly with: ", self.answer)
             elif self.life == 6:
                 self._lose_state()
             else:
@@ -26,22 +28,23 @@ class MasterMind:
         sys.exit()
 
     def _show_correct_guesses(self):
-        for i in range(len(self.guess)):
-            if str(self.guess[i]) == self.answer[i]:
-                self.correct_guesses[i] = str(self.guess[i])
-            elif i in self.answer and str(self.guess):
-                if i not in self.contains_number:
-                    self.contains_number.append(i)
+        for i, num in enumerate(self.guess, start = 0):
+            if self.guess[i] == self.answer[i]:
+                self.correct_guesses[i] = str(num)
+            elif num in self.answer and self.guess:
+                if num not in self.contains_number:
+                    self.contains_number.append(num)
 
     def _lose_state(self):
-        print("You have used all your guesses. Better luck next time!\n\n")
+        print("You have used all your guesses. The correct answer was: ", self.answer , "\n\n")
         self.life = 0
         self._starting_output()
 
     def _take_input(self):
         self._show_correct_guesses()
-        print("Guess is incorrect. You guessed the following digits correctly: ", self.correct_guesses, "\n")
+        print("Guess is incorrect. You guessed the following digits correctly: ", self.correct_guesses)
         print("The answer contains the following digits: ", self.contains_number)
+        print("Your previous guesses are: ", self.attempted_guesses, "\n")
         prompt = input()
         self._check_input(prompt)
 
@@ -58,7 +61,7 @@ class MasterMind:
         else:
             for i in range(len(prompt)):
                 self.guess[i] = int(prompt[i])
-            self.attempted_guesses[self.life] = self.guess
+            self.attempted_guesses.append(prompt)
             self.life += 1
 
     def _generate_answer(self):
