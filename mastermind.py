@@ -12,6 +12,10 @@ class MasterMind:
         self.guess = [0, 0, 0, 0]
         self.attempted_guesses = []
         self.life = 0
+        self.max_turns = 12
+
+        # Number of possible different numbers for answers
+        self.guess_range = 6
         self.running = True
 
     def run_game(self):
@@ -20,7 +24,7 @@ class MasterMind:
             if self.guess == self.answer:
                 self.running = False
                 print("Congratulations! You guessed correctly with: ", self.answer)
-            elif self.life == 6:
+            elif self.life == self.max_turns:
                 self._lose_state()
             else:
                 self._take_input()
@@ -65,7 +69,7 @@ class MasterMind:
 
     def _generate_answer(self):
         for i in range(len(self.answer)):
-            self.answer[i] = ran.randint(0, 9)
+            self.answer[i] = ran.randint(0, self.guess_range - 1)
 
 if __name__ == '__main__':
     mm = MasterMind()
